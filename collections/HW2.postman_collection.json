@@ -1,0 +1,297 @@
+{
+  "info": {
+    "_postman_id": "b231975c-e97f-44ad-b3d9-5417a312248b",
+    "name": "HW2",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "20528686"
+  },
+  "item": [
+    {
+      "name": "auth-service",
+      "item": [
+        {
+          "name": "jwks",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Иван Иванов\",\n  \"email\": \"ivan@example.com\",\n  \"password\": \"securepassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/user",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "user"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ivan@example.com\",\n  \"password\": \"securepassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/api/v1/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "api",
+                "v1",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "recipe-service",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ivan@example.com\",\n  \"password\": \"securepassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Иван Иванов\",\n  \"email\": \"ivan@example.com\",\n  \"password\": \"securepassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/user",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "user"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get recipe ingredients",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/recipes//ingredients",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "recipes",
+                "",
+                "ingredients"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get recipes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/recipes?limit=12",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "recipes"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "12"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create recipe",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJSUzI1NiIsImtpZCI6InRlc3QiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE3NzQ4OTczNjYsImlhdCI6MTc3NDgxMDk2NiwidXNlcl9pZCI6IjMifQ.vl9AB-MrCVDrA8Eww4JYHqI4ZiEPe2-B_dMGN9aQ6-LJ6BqyPlvhgXWLIj_uY88oA8sWdaXQYqGURoXHgC6eL5Sko7uTyjvXndOowG6F5lcdJtOHn-CCWlcYgLjPtLkUBu4p8hvWqAgo_i-zae9zScXQugc2eIuBT5dE7PuE1Rw1ZfVKGlTVaXUNK-t_HgGVYCjYbaEiMLcfJ4GHvEdhiFGBZSr-SFEBBpqPER4EjA3vNtNw_xo-vtivPuaRXdsywsRQNyR9knwRc-cbY-dKD0FyR3ozqg5Oo-l5sThw0gytVyV7KtNIkmjjwr0VXr-xgkbqlJI9Pe8mol3V6jpH0A",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InRlc3QiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE3NzQ4MTU2MzgsImlhdCI6MTc3NDcyOTIzOCwidXNlcl9pZCI6IjMifQ.iezLJ0yOH7CNc_HErG0idxQoCTGop_5QwZTkU2ddZHjwmsSrR1LOzE9etFjXw1YOG55SNcznTkWwtH7ktAb4qRylkSnj2pdwNfApykzYTIQM1ZKdJnX4guX5SWvkiTQ_YhWWS8ASz542shZyo9XF0rgMZDb7naCIPYMeFIqEj2MlaAQ6qBv-3l1yRTXwLfXFFmp4n8KgJZ-4_sTEV45mQIMlULqjuCT6t3c2fVKIlZcEgIgcchW_YO0jwMpKjwrjXXUzdZksOhRP7xI4l-Ob2O5bi4lAImw-4a5ggcLyPRRVgC0TRwkLBWbzLxgTpZDPy4wAur8fZjl2uud2zzxXCA"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Шоколадный торт\",\n  \"description\": \"Вкусный шоколадный торт для десерта\",\n  \"servings\": 8,\n  \"cookTimeMinutes\": 60,\n  \"ingredients\": [\n    {\n      \"id\": 1,\n      \"quantity\": {\n        \"amount\": 200,\n        \"unit\": \"г\"\n      }\n    },\n    {\n      \"id\": 2,\n      \"quantity\": {\n        \"amount\": 100,\n        \"unit\": \"г\"\n      }\n    }\n  ],\n  \"steps\": [\n    \"Разогреть духовку до 180°C\",\n    \"Смешать ингредиенты\",\n    \"Выпекать 45 минут\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/recipe",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "recipe"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
