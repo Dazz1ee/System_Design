@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: Title
+  description: Title
+  version: 1.0.0
+components:
+  schemas:
+    CreateRecipeRequestDTO:
+      type: object
+      required:
+        - title
+        - ingredients
+        - steps
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        servings:
+          type: integer
+        cookTimeMinutes:
+          type: integer
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateIngredientDTO'
+        steps:
+          type: array
+          items:
+            type: string
+    CreateIngredientDTO:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          format: int64
+        quantity:
+          $ref: '#/components/schemas/IngredientQuantityDTO'
+    IngredientQuantityDTO:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+        unit:
+          type: string
+    CreateRecipeResponseDTO:
+      type: object
+      required:
+        - id
+        - createdAt
+      properties:
+        id:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+          format: date-time
+    GetRecipesResponseDTO:
+      type: object
+      properties:
+        recipes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeResponseDTO'
+    RecipeResponseDTO:
+      type: object
+      required:
+        - id
+        - title
+        - steps
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        description:
+          type: string
+        servings:
+          type: integer
+        cookTimeMinutes:
+          type: integer
+        steps:
+          type: array
+          items:
+            type: string
+        authorId:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+          format: date-time
+    GetIngredientsResponseDTO:
+      type: object
+      required:
+        - ingredients
+      properties:
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientDTO'
+    IngredientDTO:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        amount:
+          type: number
+          format: float
+        unit:
+          type: string

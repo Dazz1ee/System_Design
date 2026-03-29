@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  description: Service sample
+  title: Service sample
+  version: "1.0"
+
+servers:
+  - url: localhost:8080
+    description: local
+
+paths:
+  /api/v1/user:
+    post:
+      tags:
+        - user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/schemas/CreateUserRequestDTO"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/user.yaml#/components/schemas/CreateUserResponseDTO"
+  /api/v1/login:
+    post:
+      tags:
+        - user
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/schemas/LoginRequestDTO"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/user.yaml#/components/schemas/LoginResponseDTO"
+  /api/v1/receipt:
+    post:
+      tags:
+        - receipt
+      operationId: createReceipt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/recipe.yaml#/components/schemas/CreateRecipeRequestDTO"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/recipe.yaml#/components/schemas/CreateRecipeResponseDTO"
+  /api/v1/recipes:
+    get:
+      tags:
+        - receipt
+      operationId: getReceipt
+      parameters:
+        - in: query
+          name: last_id
+          schema:
+            type: integer
+            format: int64
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/recipe.yaml#/components/schemas/GetRecipesResponseDTO"
+  /api/v1/recipes/{id}/ingredients:
+    get:
+      tags:
+        - ingredients
+      operationId: getIngredients
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/recipe.yaml#/components/schemas/GetIngredientsResponseDTO"

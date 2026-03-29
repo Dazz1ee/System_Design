@@ -1,0 +1,13 @@
+# .dockerignore
+build-debug/
+build-release/
+cmake-build-debug/
+cmake-build-release/
+*.pyc
+__pycache__/
+.vscode/
+.idea/
+.venv/
+venv-userver-*
+*.log
+.git/

@@ -1,0 +1,59 @@
+openapi: 3.0.0
+info:
+  description: Service sample
+  title: Service sample
+  version: "1.0"
+
+servers:
+  - url: localhost:8090
+    description: local
+
+paths:
+  /api/v1/user:
+    post:
+      tags:
+        - auth
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/schemas/CreateUserRequestDTO"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/user.yaml#/components/schemas/CreateUserResponseDTO"
+  /api/v1/login:
+    post:
+      tags:
+        - auth
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/user.yaml#/components/schemas/LoginRequestDTO"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/user.yaml#/components/schemas/LoginResponseDTO"
+  /.well-known/jwks.json:
+    get:
+      tags:
+        - auth
+      operationId: getJwks
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/recipe.yaml#/components/schemas/GetJwksResponseDTO"

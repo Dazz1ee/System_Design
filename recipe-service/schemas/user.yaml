@@ -1,0 +1,77 @@
+openapi: 3.1.0
+info:
+  title: Title
+  description: Title
+  version: 1.0.0
+components:
+  schemas:
+    CreateUserRequestDTO:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    CreateUserResponseDTO:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          format: int64
+    LoginRequestDTO:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    LoginResponseDTO:
+      type: object
+      required:
+        - token
+        - userId
+      properties:
+        token:
+          type: string
+        userId:
+          type: integer
+          format: int64
+    JWKSResponseDTO:
+      type: object
+      required:
+        - keys
+      properties:
+        keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/JWK'
+    JWK:
+      type: object
+      required:
+        - kty
+        - kid
+        - use
+        - alg
+        - pem
+      properties:
+        kty:
+          type: string
+        kid:
+          type: string
+        use:
+          type: string
+        alg:
+          type: string
+        pem:
+          type: string
