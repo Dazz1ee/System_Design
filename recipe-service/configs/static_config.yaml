@@ -35,6 +35,7 @@ components_manager:
                     network_timeout_ms: 750
                     statement_timeout_ms: 500
 
+        testsuite-support: {}
         congestion-control:
 
         http-client:
@@ -96,10 +97,9 @@ components_manager:
             base-url#env: AUTH_SERVICE_URL
         jwt-auth-checker:
             load-enabled: true
-#        postgres-db-1:
-#            dbconnection: $pg-connection
-#            dbconnection#env: DB_CONNECTION
-#            blocking_task_processor: fs-task-processor
-#            dns_resolver: async
-#            sync-start: true
-#            connlimit_mode: manual
+        postgres-db-1:
+            dbconnection: $pg-connection
+            dbconnection#env: DB_CONNECTION
+            blocking_task_processor: fs-task-processor
+            dns_resolver: async
+            sync-start: true

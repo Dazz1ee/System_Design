@@ -21,7 +21,8 @@ UserService::UserService(const components::ComponentConfig& config,
 schemas::CreateUserResponseDTO UserService::CreateUser(
     const schemas::CreateUserRequestDTO& request) const {
   formats::json::ValueBuilder builder;
-  builder["name"] = request.name;
+  builder["forename"] = request.forename;
+  builder["surname"] = request.surname;
   builder["email"] = request.email;
   builder["password"] = request.password;
   const auto request_json = formats::json::ToString(builder.ExtractValue());

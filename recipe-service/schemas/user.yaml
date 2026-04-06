@@ -8,11 +8,14 @@ components:
     CreateUserRequestDTO:
       type: object
       required:
-        - name
+        - forename
+        - surname
         - email
         - password
       properties:
-        name:
+        forename:
+          type: string
+        surname:
           type: string
         email:
           type: string

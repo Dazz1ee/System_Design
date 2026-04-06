@@ -129,7 +129,7 @@ collection:
         meta:
           id: req_5fc7bea202ff40a9a103edc73e975b94
           created: 1774700990914
-          modified: 1774701530147
+          modified: 1775518112980
           isPrivate: false
           description: ""
           sortKey: -1774700990914
@@ -138,8 +138,9 @@ collection:
           mimeType: application/json
           text: |-
             {
-              "name": "Иван Иванов",
-              "email": "ivan@example.com",
+              "forename": "Иван",
+              "surname": "Иванов",
+              "email": "ivan21@example.com",
               "password": "securepassword123"
             }
         headers:
@@ -234,7 +235,7 @@ collection:
         meta:
           id: req_6ad48853bcf0431fbc8eb884611f55f1
           created: 1774718852031
-          modified: 1774789096056
+          modified: 1775518107840
           isPrivate: false
           description: ""
           sortKey: -1774718852031
@@ -243,8 +244,9 @@ collection:
           mimeType: application/json
           text: |-
             {
-              "name": "Иван Иванов",
-              "email": "ivan@example.com",
+              "forename": "Иван",
+              "surname": "Иванов",
+              "email": "ivan21@example.com",
               "password": "securepassword123"
             }
         headers:

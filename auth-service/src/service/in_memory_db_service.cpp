@@ -17,7 +17,8 @@ InMemoryDbService::InMemoryDbService(
              .id = 1, .name = ToString(entity::ROLE_USER), .created_at = now});
 
   users_.emplace(1, entity::User{.id = 0,
-                                 .name = "admin",
+                                 .forename = "admin",
+                                 .surname = "admin",
                                  .email = "admin@example.com",
                                  .password = "admin123",
                                  .created_at = now});
@@ -58,7 +59,8 @@ entity::UserWithRoles InMemoryDbService::GetUserByEmail(
       entity::UserWithRoles user_with_roles;
       user_with_roles.id = user.second.id;
       user_with_roles.email = user.second.email;
-      user_with_roles.name = user.second.name;
+      user_with_roles.forename = user.second.forename;
+      user_with_roles.surname = user.second.surname;
       user_with_roles.password = user.second.password;
       user_with_roles.created_at = user.second.created_at;
       for (const auto& role : user_roles_) {

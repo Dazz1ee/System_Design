@@ -23,6 +23,8 @@ class PostgresDbService final : public userver::components::ComponentBase {
 
   std::vector<entity::Recipe> GetRecipes(std::int64_t lastId,
                                          std::int64_t limit) const;
-};
 
+ private:
+  const userver::storages::postgres::ClusterPtr cluster_;
+};
 }  // namespace recipe

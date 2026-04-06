@@ -21,6 +21,18 @@ struct Recipe {
   std::chrono::system_clock::time_point created_at;
 };
 
+inline auto constexpr kRecipeMapping = [](auto& i) {
+  return std::tie(
+      i.id,
+      i.title,
+      i.description,
+      i.servings,
+      i.cook_time_minutes,
+      i.author_id,
+      i.created_at
+  );
+};
+
 struct RecipeIngredient {
   int64_t recipe_id;
   int64_t ingredient_id;

@@ -4,6 +4,7 @@
 #include <userver/components/minimal_server_component_list.hpp>
 #include <userver/congestion_control/component.hpp>
 #include <userver/server/handlers/ping.hpp>
+#include <userver/testsuite/testsuite_support.hpp>
 
 #include <userver/utils/daemon_run.hpp>
 
@@ -13,20 +14,21 @@
 #include "service/db_service.hpp"
 
 int main(int argc, char* argv[]) {
-    auto component_list =
-        userver::components::MinimalServerComponentList()
-            .Append<userver::server::handlers::Ping>()
-            .AppendComponentList(userver::clients::http::ComponentList())
-            .Append<userver::clients::dns::Component>()
-            .Append<auth::InMemoryDbService>()
-            .Append<auth::PostgresDbService>()
-            .Append<auth::DbService>()
-            .Append<auth::services::AuthService>()
-            .Append<auth::create::Handler>()
-            .Append<auth::login::Handler>()
-            .Append<auth::jwks::Handler>()
-            .Append<userver::congestion_control::Component>()
-        ;
+  auto component_list =
+      userver::components::MinimalServerComponentList()
+          .Append<userver::server::handlers::Ping>()
+          .AppendComponentList(userver::clients::http::ComponentList())
+          .Append<userver::clients::dns::Component>()
+          .Append<auth::InMemoryDbService>()
+          .Append<auth::PostgresDbService>()
+          .Append<auth::DbService>()
+          .Append<auth::services::AuthService>()
+          .Append<auth::create::Handler>()
+          .Append<auth::login::Handler>()
+          .Append<auth::jwks::Handler>()
+          .Append<userver::congestion_control::Component>()
+          .Append<userver::components::TestsuiteSupport>()
+          .Append<userver::components::Postgres>("postgres-db-1");
 
-    return userver::utils::DaemonMain(argc, argv, component_list);
+  return userver::utils::DaemonMain(argc, argv, component_list);
 }

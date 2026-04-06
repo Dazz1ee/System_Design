@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
         libboost-program-options1.83.0 \
         libboost-regex1.83.0 \
         libboost-stacktrace1.83.0 \
+        libboost-atomic1.83.0 \
         libcrypto++8t64 \
         libjemalloc2 \
         libre2-10 \

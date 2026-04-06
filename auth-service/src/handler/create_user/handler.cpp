@@ -4,15 +4,14 @@
 
 namespace auth::create {
 
-Handler::Handler(
-    const userver::components::ComponentConfig& config,
-    const userver::components::ComponentContext& context)
+Handler::Handler(const userver::components::ComponentConfig& config,
+                 const userver::components::ComponentContext& context)
     : HttpHandlerBase(config, context),
       auth_service_(context.FindComponent<services::AuthService>()) {}
 
-
 void Validate(const schemas::CreateUserRequestDTO& request_dto) {
-  if (request_dto.email.empty() || request_dto.password.empty() || request_dto.name.empty()) {
+  if (request_dto.email.empty() || request_dto.password.empty() ||
+      request_dto.forename.empty() || request_dto.surname.empty()) {
     throw userver::server::handlers::ClientError();
   }
 }
@@ -23,8 +22,7 @@ std::string Handler::HandleRequestThrow(
   const auto request_json =
       userver::formats::json::FromString(request.RequestBody());
 
-  const auto request_dto =
-      request_json.As<schemas::CreateUserRequestDTO>();
+  const auto request_dto = request_json.As<schemas::CreateUserRequestDTO>();
   Validate(request_dto);
 
   auto response_dto = auth_service_.CreateUser(request_dto);
@@ -38,4 +36,4 @@ std::string Handler::HandleRequestThrow(
   return userver::formats::json::ToString(response_json);
 }
 
-}  // namespace user
+}  // namespace auth::create
