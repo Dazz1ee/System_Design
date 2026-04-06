@@ -4,10 +4,12 @@
 #include <userver/components/minimal_server_component_list.hpp>
 #include <userver/congestion_control/component.hpp>
 #include <userver/server/handlers/ping.hpp>
+#include <userver/testsuite/testsuite_support.hpp>
 
 #include <userver/utils/daemon_run.hpp>
 
 #include <auth/jwt_auth_factory.hpp>
+
 #include "auth/jwt_auth_checker.hpp"
 #include "handler/create_recipe/handler.hpp"
 #include "handler/create_user/handler.hpp"
@@ -37,7 +39,10 @@ int main(int argc, char* argv[]) {
           .Append<recipe::create::Handler>()
           .Append<recipe::ingredients::Handler>()
           .Append<user::create::Handler>()
-          .Append<user::Handler>();
+          .Append<user::Handler>()
+          .Append<userver::components::TestsuiteSupport>()
+          .Append<userver::components::Postgres>("postgres-db-1")
+  ;
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

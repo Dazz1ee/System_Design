@@ -50,7 +50,8 @@ properties:
 schemas::CreateUserResponseDTO AuthService::CreateUser(
     const schemas::CreateUserRequestDTO& request) const {
   entity::User user = {.id = 0,
-                       .name = request.name,
+                       .forename = request.forename,
+                       .surname = request.surname,
                        .email = request.email,
                        .password = request.password,
                        .created_at = std::chrono::system_clock::now()};

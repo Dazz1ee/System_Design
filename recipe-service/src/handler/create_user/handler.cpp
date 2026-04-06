@@ -10,7 +10,7 @@ Handler::Handler(
       user_service_(context.FindComponent<services::UserService>()) {}
 
 void Validate(const schemas::CreateUserRequestDTO& request) {
-  if (request.email.empty() || request.password.empty() || request.name.empty()) {
+  if (request.email.empty() || request.password.empty() || request.forename.empty() || request.surname.empty()) {
     throw userver::server::handlers::ClientError();
   }
 }

@@ -7,6 +7,10 @@ services:
       context: ./auth-service
       dockerfile: Dockerfile
     container_name: auth-service
+    depends_on:
+      - auth-db
+    environment:
+      DB_CONNECTION: "postgresql://postgres:postgres@auth-db:5432/auth"
     ports:
       - "8081:8081"
     networks:
@@ -27,8 +31,10 @@ services:
       - "8080:8080"
     environment:
       AUTH_SERVICE_URL: "http://auth-service:8081"
+      DB_CONNECTION: "postgresql://postgres:postgres@recipe-db:5432/recipe"
     depends_on:
       - auth-service
+      - recipe-db
     networks:
       - recipe-network
     healthcheck:
@@ -36,6 +42,41 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
+
+
+  auth-db:
+    image: postgres:16
+    container_name: auth-db
+    restart: always
+    environment:
+      POSTGRES_DB: auth
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - recipe-network
+    ports:
+      - "5433:5432"
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+
+  recipe-db:
+    image: postgres:16
+    container_name: recipe-db
+    restart: always
+    environment:
+      POSTGRES_DB: recipe
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - recipe-network
+    ports:
+      - "5432:5432"
+    volumes:
+      - recipe_db_data:/var/lib/postgresql/data
+
+volumes:
+  auth_db_data:
+  recipe_db_data:
 
 networks:
   recipe-network:

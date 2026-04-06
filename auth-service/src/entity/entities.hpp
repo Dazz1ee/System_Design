@@ -7,7 +7,8 @@
 namespace auth::entity {
 struct User {
   std::int64_t id;
-  std::string name;
+  std::string forename;
+  std::string surname;
   std::string email;
   std::string password;
   std::chrono::system_clock::time_point created_at;
@@ -21,7 +22,8 @@ struct Role {
 
 struct UserWithRoles {
   std::int64_t id;
-  std::string name;
+  std::string forename;
+  std::string surname;
   std::string email;
   std::string password;
   std::chrono::system_clock::time_point created_at;

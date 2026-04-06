@@ -3,6 +3,7 @@ worker-fs-threads: 2
 logger-level: debug
 
 is-testing: ture
+enable_postgres: true
 
 server-port: 8081
 
@@ -10,4 +11,3 @@ public-key-path: ../app/keys/public.pem
 private-key-path: ../app/keys/private.pem
 
 # change to URI of your postgres database
-pg-connection: postgresql://testsuite@localhost:15433/auth_service_db_1

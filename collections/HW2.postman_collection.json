@@ -13,7 +13,24 @@
           "name": "jwks",
           "request": {
             "method": "GET",
-            "header": []
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8081/.well-known/jwks.json",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                ".well-known",
+                "jwks.json"
+              ]
+            }
           },
           "response": []
         },
@@ -33,7 +50,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Иван Иванов\",\n  \"email\": \"ivan@example.com\",\n  \"password\": \"securepassword123\"\n}",
+              "raw": "{\n  \"forename\": \"Иван\",\n  \"surname\": \"Иванов\",\n  \"email\": \"ivan11@example.com\",\n  \"password\": \"securepassword123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -72,7 +89,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"ivan@example.com\",\n  \"password\": \"securepassword123\"\n}",
+              "raw": "{\n  \"email\": \"ivan11@example.com\",\n  \"password\": \"securepassword123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -116,7 +133,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"email\": \"ivan@example.com\",\n  \"password\": \"securepassword123\"\n}",
+              "raw": "{\n  \"email\": \"ivan21@example.com\",\n  \"password\": \"securepassword123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -155,7 +172,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Иван Иванов\",\n  \"email\": \"ivan@example.com\",\n  \"password\": \"securepassword123\"\n}",
+              "raw": "{\n  \"forename\": \"Иван\",\n  \"surname\": \"Иванов\",\n  \"email\": \"ivan21@example.com\",\n  \"password\": \"securepassword123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -189,7 +206,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:8080/api/v1/recipes//ingredients",
+              "raw": "http://localhost:8080/api/v1/recipes/311/ingredients",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -199,7 +216,7 @@
                 "api",
                 "v1",
                 "recipes",
-                "",
+                "311",
                 "ingredients"
               ]
             }
@@ -217,7 +234,7 @@
               }
             ],
             "url": {
-              "raw": "http://localhost:8080/api/v1/recipes?limit=12",
+              "raw": "http://localhost:8080/api/v1/recipes",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -227,12 +244,6 @@
                 "api",
                 "v1",
                 "recipes"
-              ],
-              "query": [
-                {
-                  "key": "limit",
-                  "value": "12"
-                }
               ]
             }
           },
@@ -246,7 +257,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "eyJhbGciOiJSUzI1NiIsImtpZCI6InRlc3QiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE3NzQ4OTczNjYsImlhdCI6MTc3NDgxMDk2NiwidXNlcl9pZCI6IjMifQ.vl9AB-MrCVDrA8Eww4JYHqI4ZiEPe2-B_dMGN9aQ6-LJ6BqyPlvhgXWLIj_uY88oA8sWdaXQYqGURoXHgC6eL5Sko7uTyjvXndOowG6F5lcdJtOHn-CCWlcYgLjPtLkUBu4p8hvWqAgo_i-zae9zScXQugc2eIuBT5dE7PuE1Rw1ZfVKGlTVaXUNK-t_HgGVYCjYbaEiMLcfJ4GHvEdhiFGBZSr-SFEBBpqPER4EjA3vNtNw_xo-vtivPuaRXdsywsRQNyR9knwRc-cbY-dKD0FyR3ozqg5Oo-l5sThw0gytVyV7KtNIkmjjwr0VXr-xgkbqlJI9Pe8mol3V6jpH0A",
+                  "value": "eyJhbGciOiJSUzI1NiIsImtpZCI6InRlc3QiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE3NzU2MDA3NjQsImlhdCI6MTc3NTUxNDM2NCwidXNlcl9pZCI6IjMifQ.g_edwxvH9OIAJdlwpxm1Q3mVg2-srE-1-9hzLFtlxb2p_Xi9RqKaekX4WQY8Io8nSscpZaxqPVcEQf0wPr7HmcNfoadFWTjtBjOTajrvdDp4MS3Frj-dL1ciN6XR63J_HeRBoCKyXwi94-GxMxoZpqKbcNaD5G-Wkan9nJiFhYAXwYqAxhMREnb0vMKJ3uAn85j_QS5EUr3SCvC5Hbnh7i338fbB7zOMP1GOF4V82yHcsn9QkBBFaF9tmrUI_COfjCSefnFxFz7khA4gdGfRjDxzs8LJmEj-sHA48hHnItvZ5gtkLRH4wtGzI03SrhINO5B31BLoeOp7tLIHUaQrFQ",
                   "type": "string"
                 }
               ]
