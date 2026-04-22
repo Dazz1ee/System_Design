@@ -29,6 +29,8 @@ RUN apt-get update && apt-get install -y \
         libcctz2 \
         libyaml-cpp0.8 \
         zlib1g \
+        libbson-dev \
+        libmongoc-dev \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

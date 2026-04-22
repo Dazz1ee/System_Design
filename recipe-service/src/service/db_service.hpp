@@ -1,6 +1,5 @@
 #pragma once
 
-#include <userver/clients/http/client.hpp>
 #include <userver/components/component.hpp>
 #include <userver/components/component_base.hpp>
 #include <userver/yaml_config/schema.hpp>

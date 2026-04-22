@@ -5,6 +5,7 @@
 #include <userver/congestion_control/component.hpp>
 #include <userver/server/handlers/ping.hpp>
 #include <userver/testsuite/testsuite_support.hpp>
+#include <userver/storages/mongo/component.hpp>
 
 #include <userver/utils/daemon_run.hpp>
 
@@ -12,9 +13,12 @@
 
 #include "auth/jwt_auth_checker.hpp"
 #include "handler/create_recipe/handler.hpp"
+#include "handler/create_recipe_v2/handler.hpp"
 #include "handler/create_user/handler.hpp"
 #include "handler/get_ingredients/handler.hpp"
+#include "handler/get_ingredients_v2/handler.hpp"
 #include "handler/get_recipes/handler.hpp"
+#include "handler/get_recipes_v2/handler.hpp"
 #include "handler/login/handler.hpp"
 #include "service/recipe_service.hpp"
 #include "service/user_service.hpp"
@@ -30,6 +34,7 @@ int main(int argc, char* argv[]) {
           .Append<userver::congestion_control::Component>()
           .Append<recipe::InMemoryDbService>()
           .Append<recipe::PostgresDbService>()
+          .Append<recipe::MongoDbService>()
           .Append<recipe::DbService>()
           .Append<recipe::services::RecipeService>()
           .Append<user::services::UserService>()
@@ -38,10 +43,14 @@ int main(int argc, char* argv[]) {
           .Append<recipe::all::Handler>()
           .Append<recipe::create::Handler>()
           .Append<recipe::ingredients::Handler>()
+          .Append<recipe::all::v2::Handler>()
+          .Append<recipe::create::v2::Handler>()
+          .Append<recipe::ingredients::v2::Handler>()
           .Append<user::create::Handler>()
           .Append<user::Handler>()
           .Append<userver::components::TestsuiteSupport>()
           .Append<userver::components::Postgres>("postgres-db-1")
+          .Append<userver::components::Mongo>("mongo-db")
   ;
 
   return userver::utils::DaemonMain(argc, argv, component_list);

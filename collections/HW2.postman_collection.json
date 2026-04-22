@@ -224,6 +224,34 @@
           "response": []
         },
         {
+          "name": "Get recipe ingredients V2",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/recipes/311/ingredients",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "recipes",
+                "311",
+                "ingredients"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Get recipes",
           "request": {
             "method": "GET",
@@ -250,7 +278,86 @@
           "response": []
         },
         {
+          "name": "Get recipes V2",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8080/api/v1/recipes",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "recipes"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Create recipe",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJSUzI1NiIsImtpZCI6InRlc3QiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE3NzU2MDA3NjQsImlhdCI6MTc3NTUxNDM2NCwidXNlcl9pZCI6IjMifQ.g_edwxvH9OIAJdlwpxm1Q3mVg2-srE-1-9hzLFtlxb2p_Xi9RqKaekX4WQY8Io8nSscpZaxqPVcEQf0wPr7HmcNfoadFWTjtBjOTajrvdDp4MS3Frj-dL1ciN6XR63J_HeRBoCKyXwi94-GxMxoZpqKbcNaD5G-Wkan9nJiFhYAXwYqAxhMREnb0vMKJ3uAn85j_QS5EUr3SCvC5Hbnh7i338fbB7zOMP1GOF4V82yHcsn9QkBBFaF9tmrUI_COfjCSefnFxFz7khA4gdGfRjDxzs8LJmEj-sHA48hHnItvZ5gtkLRH4wtGzI03SrhINO5B31BLoeOp7tLIHUaQrFQ",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InRlc3QiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE3NzQ4MTU2MzgsImlhdCI6MTc3NDcyOTIzOCwidXNlcl9pZCI6IjMifQ.iezLJ0yOH7CNc_HErG0idxQoCTGop_5QwZTkU2ddZHjwmsSrR1LOzE9etFjXw1YOG55SNcznTkWwtH7ktAb4qRylkSnj2pdwNfApykzYTIQM1ZKdJnX4guX5SWvkiTQ_YhWWS8ASz542shZyo9XF0rgMZDb7naCIPYMeFIqEj2MlaAQ6qBv-3l1yRTXwLfXFFmp4n8KgJZ-4_sTEV45mQIMlULqjuCT6t3c2fVKIlZcEgIgcchW_YO0jwMpKjwrjXXUzdZksOhRP7xI4l-Ob2O5bi4lAImw-4a5ggcLyPRRVgC0TRwkLBWbzLxgTpZDPy4wAur8fZjl2uud2zzxXCA"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/12.4.0"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Шоколадный торт\",\n  \"description\": \"Вкусный шоколадный торт для десерта\",\n  \"servings\": 8,\n  \"cookTimeMinutes\": 60,\n  \"ingredients\": [\n    {\n      \"id\": 1,\n      \"quantity\": {\n        \"amount\": 200,\n        \"unit\": \"г\"\n      }\n    },\n    {\n      \"id\": 2,\n      \"quantity\": {\n        \"amount\": 100,\n        \"unit\": \"г\"\n      }\n    }\n  ],\n  \"steps\": [\n    \"Разогреть духовку до 180°C\",\n    \"Смешать ингредиенты\",\n    \"Выпекать 45 минут\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/v1/recipe",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "v1",
+                "recipe"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create recipe V2",
           "request": {
             "auth": {
               "type": "bearer",

@@ -32,9 +32,11 @@ services:
     environment:
       AUTH_SERVICE_URL: "http://auth-service:8081"
       DB_CONNECTION: "postgresql://postgres:postgres@recipe-db:5432/recipe"
+      MONGO_DB_CONNECTION: "mongodb://admin:password@recipe-mongo:27017/recipe-db?authSource=admin"
     depends_on:
       - auth-service
       - recipe-db
+      - recipe-mongo
     networks:
       - recipe-network
     healthcheck:
@@ -74,9 +76,45 @@ services:
     volumes:
       - recipe_db_data:/var/lib/postgresql/data
 
+  recipe-mongo:
+    image: mongo:8.0.20
+    container_name: recipe-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: recipe_db
+    volumes:
+      - mongo_data:/data/db
+      - mongo_config:/data/configdb
+    networks:
+      - recipe-network
+  
+  auth-mongo:
+    image: mongo:8.0.20
+    container_name: auth-mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: auth_db
+    volumes:
+      - auth_mongo_data:/data/db
+      - auth_mongo_config:/data/configdb
+    networks:
+      - recipe-network
+
 volumes:
   auth_db_data:
   recipe_db_data:
+  mongo_data:
+  mongo_config:
+  auth_mongo_data:
+  auth_mongo_config:
 
 networks:
   recipe-network:

@@ -8,6 +8,7 @@ find_package(
     userver
     COMPONENTS core chaotic #
     postgresql
+    mongo
     QUIET
 )
 if (NOT userver_FOUND)
@@ -41,6 +42,9 @@ add_library(
     src/handler/get_recipes/handler.cpp #
     src/handler/create_recipe/handler.cpp #
     src/handler/get_ingredients/handler.cpp #
+    src/handler/get_recipes_v2/handler.cpp #
+    src/handler/create_recipe_v2/handler.cpp #
+    src/handler/get_ingredients_v2/handler.cpp #
     src/handler/login/handler.cpp #
     src/service/user_service.cpp #
     src/service/recipe_service.cpp #
@@ -48,6 +52,7 @@ add_library(
     src/service/db_service.cpp #
     src/service/in_memory_db_service.cpp #
     src/service/postgers_db_service.cpp #
+    src/service/mongo_db_service.cpp #
     src/auth/jwt_auth_checker.cpp #
     src/auth/jwt_auth_factory.cpp #
     src/auth/jwt_utils.cpp #
@@ -56,6 +61,7 @@ target_link_libraries(
     ${PROJECT_NAME}_objs
     PUBLIC userver::core #
     userver::postgresql
+    userver::mongo
     jwt-cpp::jwt-cpp
 )
 
