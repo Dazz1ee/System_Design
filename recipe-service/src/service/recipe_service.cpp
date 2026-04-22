@@ -8,7 +8,8 @@ RecipeService::RecipeService(
     const userver::components::ComponentConfig& config,
     const userver::components::ComponentContext& context)
     : ComponentBase(config, context),
-      db_service_(context.FindComponent<DbService>()) {}
+      db_service_(context.FindComponent<DbService>()),
+      mongo_db_service_(context.FindComponent<MongoDbService>()) {}
 
 entity::Recipe BuildEntity(const schemas::CreateRecipeRequestDTO& dto,
                            int64_t author_id) {
@@ -28,6 +29,36 @@ entity::Recipe BuildEntity(const schemas::CreateRecipeRequestDTO& dto,
 
     const auto& quantity = ingredient.quantity;
     ingredient_entity.id = ingredient.id;
+    ingredient_entity.amount = quantity->amount;
+    ingredient_entity.unit = quantity->unit;
+
+    entity.ingredients.push_back(std::move(ingredient_entity));
+  }
+
+  return entity;
+}
+
+entity::MongoRecipe BuildMongoEntity(
+    const schemas::CreateRecipeRequestV2DTO& dto, int64_t author_id) {
+  entity::MongoRecipe entity;
+  entity.title = dto.title;
+  entity.description = dto.description;
+  entity.servings = dto.servings;
+  entity.cook_time_minutes = dto.cookTimeMinutes;
+  entity.author_id = author_id;
+  entity.created_at = std::chrono::system_clock::now();
+
+  entity.steps.reserve(dto.steps.size());
+  for (int i = 0; i < dto.steps.size(); ++i) {
+    entity.steps.push_back({i, dto.steps[i]});
+  }
+
+  entity.ingredients.reserve(dto.ingredients.size());
+  for (const auto& ingredient : dto.ingredients) {
+    entity::MongoRecipeIngredient ingredient_entity;
+
+    const auto& quantity = ingredient.quantity;
+    ingredient_entity.ingredient_id = ingredient.id;
     ingredient_entity.amount = quantity->amount;
     ingredient_entity.unit = quantity->unit;
 
@@ -94,6 +125,79 @@ schemas::GetIngredientsResponseDTO RecipeService::GetRecipeIngredients(
   }
 
   schemas::GetIngredientsResponseDTO response;
+  response.ingredients = std::move(ingredientsResponse);
+  return response;
+}
+
+schemas::CreateRecipeResponseV2DTO RecipeService::CreateRecipeV2(
+    const schemas::CreateRecipeRequestV2DTO& request,
+    std::int64_t user_id) const {
+  entity::MongoRecipe recipe = BuildMongoEntity(request, user_id);
+  const entity::MongoRecipe& created_recipe =
+      mongo_db_service_.CreateRecipe(recipe);
+  schemas::CreateRecipeResponseV2DTO response;
+  response.id = created_recipe.id;
+  response.createdAt =
+      USERVER_NAMESPACE::utils::datetime::TimePointTz(recipe.created_at);
+
+  return response;
+}
+
+schemas::GetRecipesResponseV2DTO RecipeService::GetRecipesV2(
+    std::string last_id, std::int64_t limit) const {
+  std::vector<entity::MongoRecipe> recipes =
+      mongo_db_service_.GetRecipes(last_id, limit);
+  std::vector<schemas::RecipeResponseV2DTO> recipesResponse;
+  recipesResponse.reserve(recipes.size());
+
+  for (auto recipe : recipes) {
+    schemas::RecipeResponseV2DTO dto;
+    std::vector<std::string> steps;
+    std::vector<entity::RecipeStep> mongoSteps = recipe.steps;
+    std::sort(mongoSteps.begin(), mongoSteps.end(),
+              [](const entity::RecipeStep& a, const entity::RecipeStep& b) {
+                return a.step_number < b.step_number;
+              });
+    for (const auto& step : mongoSteps) {
+      steps.push_back(step.description);
+    }
+
+    dto.id = recipe.id;
+    dto.title = recipe.title;
+    dto.description = recipe.description;
+    dto.servings = recipe.servings;
+    dto.cookTimeMinutes = recipe.cook_time_minutes;
+    dto.steps = steps;
+    dto.authorId = recipe.author_id;
+    dto.createdAt =
+        USERVER_NAMESPACE::utils::datetime::TimePointTz(recipe.created_at);
+
+    recipesResponse.push_back(std::move(dto));
+  }
+  schemas::GetRecipesResponseV2DTO response;
+  response.recipes = std::move(recipesResponse);
+  return response;
+}
+
+schemas::GetIngredientsResponseV2DTO RecipeService::GetRecipeIngredientsV2(
+    std::string recipe_id) const {
+  std::vector<entity::MongoRecipeIngredient> ingredients =
+      mongo_db_service_.GetRecipeIngredients(recipe_id);
+  std::vector<schemas::IngredientV2DTO> ingredientsResponse;
+  ingredientsResponse.reserve(ingredients.size());
+
+  for (const auto& [id, name, amount, unit] : ingredients) {
+    schemas::IngredientV2DTO ingredient_dto;
+
+    ingredient_dto.id = id;
+    ingredient_dto.name = name;
+    ingredient_dto.amount = amount;
+    ingredient_dto.unit = unit;
+
+    ingredientsResponse.push_back(std::move(ingredient_dto));
+  }
+
+  schemas::GetIngredientsResponseV2DTO response;
   response.ingredients = std::move(ingredientsResponse);
   return response;
 }

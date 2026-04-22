@@ -45,7 +45,7 @@ paths:
             application/json:
               schema:
                 $ref: "../schemas/user.yaml#/components/schemas/LoginResponseDTO"
-  /api/v1/receipt:
+  /api/v1/recipe:
     post:
       tags:
         - receipt
@@ -63,6 +63,24 @@ paths:
             application/json:
               schema:
                 $ref: "../schemas/recipe.yaml#/components/schemas/CreateRecipeResponseDTO"
+  /api/v2/recipe:
+    post:
+      tags:
+        - receipt
+      operationId: createReceipt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../schemas/recipe.yaml#/components/schemas/CreateRecipeRequestDTO"
+      responses:
+        201:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/recipe.yaml#/components/schemas/CreateRecipeResponseV2DTO"
   /api/v1/recipes:
     get:
       tags:
@@ -72,8 +90,7 @@ paths:
         - in: query
           name: last_id
           schema:
-            type: integer
-            format: int64
+            type: string
         - in: query
           name: limit
           schema:
@@ -85,6 +102,27 @@ paths:
             application/json:
               schema:
                 $ref: "../schemas/recipe.yaml#/components/schemas/GetRecipesResponseDTO"
+  /api/v2/recipes:
+    get:
+      tags:
+        - receipt
+      operationId: getReceipt
+      parameters:
+        - in: query
+          name: last_id
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/recipe.yaml#/components/schemas/GetRecipesResponseV2DTO"
   /api/v1/recipes/{id}/ingredients:
     get:
       tags:
@@ -102,3 +140,20 @@ paths:
             application/json:
               schema:
                 $ref: "../schemas/recipe.yaml#/components/schemas/GetIngredientsResponseDTO"
+  /api/v2/recipes/{id}/ingredients:
+    get:
+      tags:
+        - ingredients
+      operationId: getIngredients
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "../schemas/recipe.yaml#/components/schemas/GetIngredientsResponseV2DTO"

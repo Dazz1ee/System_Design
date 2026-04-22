@@ -5,7 +5,9 @@
 #include <userver/components/component.hpp>
 
 #include "schemas/recipe.hpp"
+// #include "../build-debug/src/schemas/recipe.hpp"
 #include "db_service.hpp"
+#include "mongo_db_service.hpp"
 
 namespace recipe::services {
 
@@ -24,8 +26,17 @@ public:
 
   schemas::GetIngredientsResponseDTO GetRecipeIngredients(std::int64_t recipe_id) const;
 
+  schemas::CreateRecipeResponseV2DTO CreateRecipeV2(
+    const schemas::CreateRecipeRequestV2DTO& request,
+    std::int64_t userId) const;
+
+  schemas::GetRecipesResponseV2DTO GetRecipesV2(std::string last_id, int64_t limit) const;
+
+  schemas::GetIngredientsResponseV2DTO GetRecipeIngredientsV2(std::string recipe_id) const;
+
 private:
   const DbService& db_service_;
+  const MongoDbService& mongo_db_service_;
 };
 
 }  // namespace recipe

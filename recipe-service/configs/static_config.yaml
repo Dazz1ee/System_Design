@@ -80,12 +80,31 @@ components_manager:
             method: GET
             task_processor: main-task-processor
 
+        handler-create-recipe-v2:
+            path: /api/v2/recipe
+            method: POST
+            task_processor: main-task-processor
+            auth:
+                types:
+                    - jwt-auth
+        handler-get-recipes-v2:
+            path: /api/v2/recipes
+            method: GET
+            task_processor: main-task-processor
+
+        handler-get-ingredients-v2:
+            path: /api/v2/recipes/{id}/ingredients
+            method: GET
+            task_processor: main-task-processor
+
         db-service:
             load-enabled: true
             enable_postgres: $enable_postgres
         in-memory-db-service:
             load-enabled: true
         postgres-db-service:
+            load-enabled: true
+        mongo-db-service:
             load-enabled: true
         recipe-service:
             load-enabled: true
@@ -103,3 +122,6 @@ components_manager:
             blocking_task_processor: fs-task-processor
             dns_resolver: async
             sync-start: true
+        mongo-db:
+            dbconnection: $pg-connection
+            dbconnection#env: MONGO_DB_CONNECTION

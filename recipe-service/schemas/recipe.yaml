@@ -28,6 +28,29 @@ components:
           type: array
           items:
             type: string
+    CreateRecipeRequestV2DTO:
+      type: object
+      required:
+        - title
+        - ingredients
+        - steps
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        servings:
+          type: integer
+        cookTimeMinutes:
+          type: integer
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateIngredientV2DTO'
+        steps:
+          type: array
+          items:
+            type: string
     CreateIngredientDTO:
       type: object
       required:
@@ -36,6 +59,15 @@ components:
         id:
           type: integer
           format: int64
+        quantity:
+          $ref: '#/components/schemas/IngredientQuantityDTO'
+    CreateIngredientV2DTO:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
         quantity:
           $ref: '#/components/schemas/IngredientQuantityDTO'
     IngredientQuantityDTO:
@@ -58,6 +90,17 @@ components:
         createdAt:
           type: string
           format: date-time
+    CreateRecipeResponseV2DTO:
+      type: object
+      required:
+        - id
+        - createdAt
+      properties:
+        id:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
     GetRecipesResponseDTO:
       type: object
       properties:
@@ -65,6 +108,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RecipeResponseDTO'
+    GetRecipesResponseV2DTO:
+      type: object
+      properties:
+        recipes:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipeResponseV2DTO'
     RecipeResponseDTO:
       type: object
       required:
@@ -75,6 +125,33 @@ components:
         id:
           type: integer
           format: int64
+        title:
+          type: string
+        description:
+          type: string
+        servings:
+          type: integer
+        cookTimeMinutes:
+          type: integer
+        steps:
+          type: array
+          items:
+            type: string
+        authorId:
+          type: integer
+          format: int64
+        createdAt:
+          type: string
+          format: date-time
+    RecipeResponseV2DTO:
+      type: object
+      required:
+        - id
+        - title
+        - steps
+      properties:
+        id:
+          type: string
         title:
           type: string
         description:
@@ -111,6 +188,30 @@ components:
         id:
           type: integer
           format: int64
+        name:
+          type: string
+        amount:
+          type: number
+          format: float
+        unit:
+          type: string
+    GetIngredientsResponseV2DTO:
+      type: object
+      required:
+        - ingredients
+      properties:
+        ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientV2DTO'
+    IngredientV2DTO:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
         name:
           type: string
         amount:
