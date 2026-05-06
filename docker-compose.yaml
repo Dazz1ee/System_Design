@@ -29,6 +29,7 @@ services:
     container_name: recipe-service
     ports:
       - "8080:8080"
+      - "8082:8082"
     environment:
       AUTH_SERVICE_URL: "http://auth-service:8081"
       DB_CONNECTION: "postgresql://postgres:postgres@recipe-db:5432/recipe"
@@ -108,7 +109,88 @@ services:
     networks:
       - recipe-network
 
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+    ports:
+      - "9090:9090"
+    depends_on:
+      - recipe-service
+    networks:
+      - recipe-network
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - recipe-network
+  
+  redis-ingredient:
+    image: redis:7.2-alpine
+    container_name: redis-ingredient
+    command: >
+      redis-server 
+      --maxmemory 100mb 
+      --maxmemory-policy allkeys-lfu 
+      --port 6379
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - recipe-network
+  
+  redis-recipe:
+    image: redis:7.2-alpine
+    container_name: redis-recipe
+    command: >
+      redis-server 
+      --maxmemory 200mb 
+      --maxmemory-policy allkeys-lfu 
+      --port 6380
+    ports:
+      - "6380:6380"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - recipe-network
+
+  redis-rate-limit:
+    image: redis:7.2-alpine
+    container_name: redis-rate-limit
+    command: >
+      redis-server 
+      --maxmemory 50mb 
+      --maxmemory-policy allkeys-lfu 
+      --port 6381
+    ports:
+      - "6381:6381"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - recipe-network
+
 volumes:
+  grafana_data:
   auth_db_data:
   recipe_db_data:
   mongo_data:

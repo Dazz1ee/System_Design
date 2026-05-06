@@ -4,12 +4,16 @@
 #include <userver/components/minimal_server_component_list.hpp>
 #include <userver/congestion_control/component.hpp>
 #include <userver/server/handlers/ping.hpp>
-#include <userver/testsuite/testsuite_support.hpp>
+#include <userver/server/handlers/server_monitor.hpp>
 #include <userver/storages/mongo/component.hpp>
+#include <userver/storages/secdist/component.hpp>
+#include <userver/storages/secdist/provider_component.hpp>
+#include <userver/testsuite/testsuite_support.hpp>
 
 #include <userver/utils/daemon_run.hpp>
 
 #include <auth/jwt_auth_factory.hpp>
+#include <userver/storages/redis/component.hpp>
 
 #include "auth/jwt_auth_checker.hpp"
 #include "handler/create_recipe/handler.hpp"
@@ -20,14 +24,24 @@
 #include "handler/get_recipes/handler.hpp"
 #include "handler/get_recipes_v2/handler.hpp"
 #include "handler/login/handler.hpp"
+#include "rate-limit/custom_pipeline.hpp"
+#include "rate-limit/rate_limit_middleware_factory.hpp"
+#include "service/cache/ingredient_cache_service.hpp"
+#include "service/cache/pg_ingredient_cache_service.hpp"
+#include "service/cache/pg_recipe_cache_service.hpp"
+#include "service/cache/recipe_cache_service.hpp"
 #include "service/recipe_service.hpp"
 #include "service/user_service.hpp"
 
+namespace ratelimit {
+class CustomHandlerPipelineBuilder;
+}
 int main(int argc, char* argv[]) {
   userver::server::handlers::auth::RegisterAuthCheckerFactory<
       auth::jwt::JwtAuthCheckerFactory>();
   auto component_list =
       userver::components::MinimalServerComponentList()
+          .Append<userver::server::handlers::ServerMonitor>()
           .Append<userver::server::handlers::Ping>()
           .AppendComponentList(userver::clients::http::ComponentList())
           .Append<userver::clients::dns::Component>()
@@ -39,6 +53,10 @@ int main(int argc, char* argv[]) {
           .Append<recipe::services::RecipeService>()
           .Append<user::services::UserService>()
           .Append<auth::services::AuthServiceClient>()
+          .Append<cache::services::IngredientCacheService>()
+          .Append<cache::services::RecipeCacheService>()
+          .Append<cache::services::PgIngredientCacheService>()
+          .Append<cache::services::PgRecipeCacheService>()
           .Append<auth::jwt::JwtAuthComponent>()
           .Append<recipe::all::Handler>()
           .Append<recipe::create::Handler>()
@@ -46,12 +64,18 @@ int main(int argc, char* argv[]) {
           .Append<recipe::all::v2::Handler>()
           .Append<recipe::create::v2::Handler>()
           .Append<recipe::ingredients::v2::Handler>()
+          .Append<cache::services::RateLimitCacheService>()
+          .Append<ratelimit::RateLimitMiddlewareFactory>()
           .Append<user::create::Handler>()
           .Append<user::Handler>()
           .Append<userver::components::TestsuiteSupport>()
           .Append<userver::components::Postgres>("postgres-db-1")
           .Append<userver::components::Mongo>("mongo-db")
-  ;
+          .Append<userver::components::Redis>("redis-database")
+          .Append<userver::components::Secdist>()
+          .Append<userver::components::DefaultSecdistProvider>()
+          .Append<ratelimit::CustomHandlerPipelineBuilder>(
+              "custom-handler-pipeline-builder");
 
   return userver::utils::DaemonMain(argc, argv, component_list);
 }

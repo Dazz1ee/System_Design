@@ -6,6 +6,10 @@
 
 #include "schemas/recipe.hpp"
 // #include "../build-debug/src/schemas/recipe.hpp"
+#include "cache/ingredient_cache_service.hpp"
+#include "cache/pg_ingredient_cache_service.hpp"
+#include "cache/pg_recipe_cache_service.hpp"
+#include "cache/recipe_cache_service.hpp"
 #include "db_service.hpp"
 #include "mongo_db_service.hpp"
 
@@ -37,6 +41,10 @@ public:
 private:
   const DbService& db_service_;
   const MongoDbService& mongo_db_service_;
+  const cache::services::IngredientCacheService& ingredient_cache_service_;
+  const cache::services::RecipeCacheService& recipe_cache_service_;
+  const cache::services::PgIngredientCacheService& pg_ingredient_cache_service_;
+  const cache::services::PgRecipeCacheService& pg_recipe_cache_service_;
 };
 
 }  // namespace recipe

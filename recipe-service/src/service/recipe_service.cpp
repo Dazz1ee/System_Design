@@ -9,7 +9,15 @@ RecipeService::RecipeService(
     const userver::components::ComponentContext& context)
     : ComponentBase(config, context),
       db_service_(context.FindComponent<DbService>()),
-      mongo_db_service_(context.FindComponent<MongoDbService>()) {}
+      mongo_db_service_(context.FindComponent<MongoDbService>()),
+      ingredient_cache_service_(
+          context.FindComponent<cache::services::IngredientCacheService>()),
+      recipe_cache_service_(
+          context.FindComponent<cache::services::RecipeCacheService>()),
+      pg_ingredient_cache_service_(
+          context.FindComponent<cache::services::PgIngredientCacheService>()),
+      pg_recipe_cache_service_(
+          context.FindComponent<cache::services::PgRecipeCacheService>()) {}
 
 entity::Recipe BuildEntity(const schemas::CreateRecipeRequestDTO& dto,
                            int64_t author_id) {
@@ -83,7 +91,11 @@ schemas::CreateRecipeResponseDTO RecipeService::CreateRecipe(
 
 schemas::GetRecipesResponseDTO RecipeService::GetRecipes(
     std::int64_t last_id, std::int64_t limit) const {
-  std::vector<entity::Recipe> recipes = db_service_.GetRecipes(last_id, limit);
+  std::string cache_key = std::to_string(last_id) + std::to_string(limit);
+  std::vector<entity::Recipe> recipes =
+      pg_recipe_cache_service_.Get(cache_key, [this, &last_id, &limit] {
+        return db_service_.GetRecipes(last_id, limit);
+      });
   std::vector<schemas::RecipeResponseDTO> recipesResponse;
   recipesResponse.reserve(recipes.size());
 
@@ -109,7 +121,10 @@ schemas::GetRecipesResponseDTO RecipeService::GetRecipes(
 schemas::GetIngredientsResponseDTO RecipeService::GetRecipeIngredients(
     std::int64_t recipe_id) const {
   std::vector<entity::IngredientForRecipe> ingredients =
-      db_service_.GetRecipeIngredients(recipe_id);
+      pg_ingredient_cache_service_.Get(
+          std::to_string(recipe_id), [this, &recipe_id] {
+            return db_service_.GetRecipeIngredients(recipe_id);
+          });
   std::vector<schemas::IngredientDTO> ingredientsResponse;
   ingredientsResponse.reserve(ingredients.size());
 
@@ -145,8 +160,11 @@ schemas::CreateRecipeResponseV2DTO RecipeService::CreateRecipeV2(
 
 schemas::GetRecipesResponseV2DTO RecipeService::GetRecipesV2(
     std::string last_id, std::int64_t limit) const {
+  std::string cache_key = last_id + std::to_string(limit);
   std::vector<entity::MongoRecipe> recipes =
-      mongo_db_service_.GetRecipes(last_id, limit);
+      recipe_cache_service_.Get(cache_key, [this, &last_id, &limit] {
+        return mongo_db_service_.GetRecipes(last_id, limit);
+      });
   std::vector<schemas::RecipeResponseV2DTO> recipesResponse;
   recipesResponse.reserve(recipes.size());
 
@@ -182,7 +200,9 @@ schemas::GetRecipesResponseV2DTO RecipeService::GetRecipesV2(
 schemas::GetIngredientsResponseV2DTO RecipeService::GetRecipeIngredientsV2(
     std::string recipe_id) const {
   std::vector<entity::MongoRecipeIngredient> ingredients =
-      mongo_db_service_.GetRecipeIngredients(recipe_id);
+      ingredient_cache_service_.Get(recipe_id, [this, &recipe_id] {
+        return mongo_db_service_.GetRecipeIngredients(recipe_id);
+      });
   std::vector<schemas::IngredientV2DTO> ingredientsResponse;
   ingredientsResponse.reserve(ingredients.size());
 

@@ -1,0 +1,46 @@
+{
+  "redis_settings": {
+    "ingredient": {
+      "password": "",
+      "sentinels": [
+        {
+          "host": "redis-ingredient",
+          "port": 6379
+        }
+      ],
+      "shards": [
+        {
+          "name": "prod_standalone_master0"
+        }
+      ]
+    },
+    "recipe": {
+      "password": "",
+      "sentinels": [
+        {
+          "host": "redis-recipe",
+          "port": 6380
+        }
+      ],
+      "shards": [
+        {
+          "name": "prod_standalone_master0"
+        }
+      ]
+    },
+    "rate-limit": {
+      "password": "",
+      "sentinels": [
+        {
+          "host": "redis-rate-limit",
+          "port": 6381
+        }
+      ],
+      "shards": [
+        {
+          "name": "prod_standalone_master0"
+        }
+      ]
+    }
+  }
+}
