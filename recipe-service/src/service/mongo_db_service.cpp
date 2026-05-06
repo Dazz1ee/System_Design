@@ -85,8 +85,6 @@ entity::MongoRecipe MongoDbService::CreateRecipe(
               "version", 1, "steps", steps_builder, "ingredients", ing_builder);
 
   auto result = recipes_col.InsertOne(doc);
-  std::cerr << "Тут ответ" << std::endl;
-  
 
   entity::MongoRecipe response = recipe;
   response.id = oid.ToString();

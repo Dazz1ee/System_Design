@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
         libc-ares2 \
         libboost-iostreams1.83.0 \
         libboost-filesystem1.83.0 \
+        libhiredis-dev \
         libboost-locale1.83.0 \
         libboost-program-options1.83.0 \
         libboost-regex1.83.0 \
@@ -38,7 +39,7 @@ WORKDIR /app
 COPY --from=builder /app/build-release/recipe_service /app/recipe_service
 COPY configs/ /app/configs/
 
-EXPOSE 8081
+EXPOSE 8081 8082
 
 CMD ["./recipe_service", \
      "--config", "/app/configs/static_config.yaml", \

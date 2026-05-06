@@ -9,6 +9,7 @@ find_package(
     COMPONENTS core chaotic #
     postgresql
     mongo
+    redis
     QUIET
 )
 if (NOT userver_FOUND)
@@ -56,12 +57,21 @@ add_library(
     src/auth/jwt_auth_checker.cpp #
     src/auth/jwt_auth_factory.cpp #
     src/auth/jwt_utils.cpp #
+    src/service/cache/ingredient_cache_service.cpp #
+    src/service/cache/recipe_cache_service.cpp #
+    src/service/cache/pg_ingredient_cache_service.cpp #
+    src/service/cache/pg_recipe_cache_service.cpp #
+    src/service/cache/rate_limit_cache_service.cpp #
+    src/rate-limit/rate_limit_decorator.cpp #
+    src/rate-limit/rate_limit_middleware_factory.cpp
+    src/rate-limit/custom_pipeline.cpp #
 )
 target_link_libraries(
     ${PROJECT_NAME}_objs
     PUBLIC userver::core #
     userver::postgresql
     userver::mongo
+    userver::redis
     jwt-cpp::jwt-cpp
 )
 
