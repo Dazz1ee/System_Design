@@ -11,17 +11,24 @@
 ![](/lab-5/images/per-1.png)
 
 Список метрик, по которым были построенны графики в графане: 
-
 ```
-```
-
-```
+avg by(percentile) (http_handler_timings{http_path="/api/v2/recipes", application="recipe-service", percentile=~"p50|p95|p90|p99"})
 ```
 
 ```
+avg by(percentile) (http_handler_timings{http_path="/api/v1/recipes", application="recipe-service", percentile=~"p50|p95|p90|p99"})
 ```
 
 ```
+avg by(percentile) (http_handler_timings{http_path="/api/v2/recipes/_id_/ingredients", application="recipe-service", percentile=~"p50|p95|p90|p99"})
+```
+
+```
+avg by(percentile) (http_handler_timings{http_path="/api/v1/recipes/_id_/ingredients", application="recipe-service", percentile=~"p50|p95|p90|p99"})
+```
+
+```
+postgresql_connections_opened{application="recipe-service"}
 ```
 
 
@@ -50,6 +57,6 @@ Rate-limiting был реализован на основе алгоритма *
 ![](/lab-5/images/per-2.png)
 
 
-Но умешилось количество открытых соединений к бд, что плюс 
+Но умешилось количество открытых соединений к бд
 
 ![](/lab-5/images/grafana5.png)

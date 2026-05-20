@@ -9,6 +9,7 @@
 #include <userver/storages/secdist/component.hpp>
 #include <userver/storages/secdist/provider_component.hpp>
 #include <userver/testsuite/testsuite_support.hpp>
+#include <userver/urabbitmq/component.hpp>
 
 #include <userver/utils/daemon_run.hpp>
 
@@ -30,6 +31,8 @@
 #include "service/cache/pg_ingredient_cache_service.hpp"
 #include "service/cache/pg_recipe_cache_service.hpp"
 #include "service/cache/recipe_cache_service.hpp"
+#include "service/events/recipe_consumer.hpp"
+#include "service/events/recipe_producer_job.hpp"
 #include "service/recipe_service.hpp"
 #include "service/user_service.hpp"
 
@@ -53,6 +56,8 @@ int main(int argc, char* argv[]) {
           .Append<recipe::services::RecipeService>()
           .Append<user::services::UserService>()
           .Append<auth::services::AuthServiceClient>()
+          .Append<recipe::RecipeProducerJob>()
+          .Append<recipe::RecipeCreatedConsumer>()
           .Append<cache::services::IngredientCacheService>()
           .Append<cache::services::RecipeCacheService>()
           .Append<cache::services::PgIngredientCacheService>()
@@ -71,7 +76,9 @@ int main(int argc, char* argv[]) {
           .Append<userver::components::TestsuiteSupport>()
           .Append<userver::components::Postgres>("postgres-db-1")
           .Append<userver::components::Mongo>("mongo-db")
+          .Append<userver::components::Mongo>("mongo-write-db")
           .Append<userver::components::Redis>("redis-database")
+          .Append<userver::components::RabbitMQ>("recipe-rabbit")
           .Append<userver::components::Secdist>()
           .Append<userver::components::DefaultSecdistProvider>()
           .Append<ratelimit::CustomHandlerPipelineBuilder>(

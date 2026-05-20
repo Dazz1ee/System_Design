@@ -32,9 +32,8 @@ struct Recipe {
   std::chrono::system_clock::time_point created_at;
 };
 
-inline Recipe Parse(
-    const userver::formats::json::Value& json,
-    userver::formats::parse::To<Recipe>) {
+inline Recipe Parse(const userver::formats::json::Value& json,
+                    userver::formats::parse::To<Recipe>) {
   return {json["id"].As<std::int64_t>(),
           json["title"].As<std::string>(),
           json["description"].As<std::string>(),
@@ -53,9 +52,9 @@ inline userver::formats::json::Value Serialize(
   builder["id"] = recipe.id;
   builder["title"] = recipe.title;
   builder["description"] = recipe.description.value_or(nullptr);
-  builder["steps"] =
-      userver::chaotic::Array<USERVER_NAMESPACE::chaotic::Primitive<std::string>,
-                              std::vector<std::string>>{recipe.steps};
+  builder["steps"] = userver::chaotic::Array<
+      USERVER_NAMESPACE::chaotic::Primitive<std::string>,
+      std::vector<std::string>>{recipe.steps};
   builder["servings"] = recipe.servings.value_or(NULL);
   builder["cook_time_minutes"] = recipe.cook_time_minutes.value_or(NULL);
   builder["author_id"] = recipe.author_id;
@@ -80,13 +79,13 @@ struct MongoRecipeIngredient {
 };
 
 inline MongoRecipeIngredient Parse(
-    userver::formats::bson::Value bson,
+    const userver::formats::bson::Value& bson,
     userver::formats::parse::To<MongoRecipeIngredient>) {
   if (!bson.IsObject()) {
     return {};
   }
   return {bson["ingredient_id"].As<userver::formats::bson::Oid>().ToString(),
-          bson["name"].As<std::string>("Unknown"),
+          bson["name"].As<std::string>(),
           bson["amount"].As<std::optional<double>>(),
           bson["unit"].As<std::optional<std::string>>()};
 }
@@ -115,7 +114,7 @@ struct RecipeStep {
   std::string description;
 };
 
-inline RecipeStep Parse(userver::formats::bson::Value bson,
+inline RecipeStep Parse(const userver::formats::bson::Value& bson,
                         userver::formats::parse::To<RecipeStep>) {
   return {bson["step_number"].As<int>(), bson["description"].As<std::string>()};
 }
@@ -160,7 +159,7 @@ inline userver::formats::json::Value Serialize(
   builder["servings"] = recipe.servings.value_or(NULL);
   builder["cook_time_minutes"] = recipe.cook_time_minutes.value_or(NULL);
   builder["author_id"] = recipe.author_id;
-  builder["ingredients"] =   userver::chaotic::Array<
+  builder["ingredients"] = userver::chaotic::Array<
       USERVER_NAMESPACE::chaotic::Primitive<MongoRecipeIngredient>,
       std::vector<MongoRecipeIngredient>>{recipe.ingredients};
   builder["created_at"] = recipe.created_at;
@@ -179,6 +178,22 @@ inline MongoRecipe Parse(const userver::formats::json::Value& json,
       json["author_id"].As<int64_t>(),
       json["ingredients"].As<std::vector<MongoRecipeIngredient>>(),
       json["created_at"].As<std::chrono::system_clock::time_point>(),
+  };
+}
+
+inline MongoRecipe Parse(const userver::formats::bson::Value& bson,
+                         userver::formats::parse::To<MongoRecipe>) {
+  auto author_str = bson["author_id"].As<std::optional<std::string>>();
+  return {
+      bson["_id"].As<userver::formats::bson::Oid>().ToString(),
+      bson["title"].As<std::string>(),
+      bson["description"].As<std::optional<std::string>>(),
+      bson["steps"].As<std::vector<RecipeStep>>(),
+      bson["servings"].As<std::optional<int>>(),
+      bson["cook_time_minutes"].As<std::optional<int>>(),
+      author_str ?  std::stoll(author_str.value()) : 0,
+      bson["ingredients"].As<std::vector<MongoRecipeIngredient>>(),
+      bson["created_at"].As<std::chrono::system_clock::time_point>(),
   };
 }
 

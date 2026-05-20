@@ -22,6 +22,10 @@ avg by(percentile) (http_handler_timings{http_path="/api/v2/recipes/_id_/ingredi
 avg by(percentile) (http_handler_timings{http_path="/api/v1/recipes/_id_/ingredients", application="recipe-service", percentile=~"p50|p95|p90|p99"})
 ```
 
+```
+postgresql_connections_opened{application="recipe-service"}
+```
+
 Запуск докер образов для prometheus и grafana
 
 ```

@@ -85,7 +85,7 @@ components_manager:
             middlewares:
                 pipeline-builder: custom-handler-pipeline-builder
                 rate-limit-decorator:
-                    rate-limit-value: 5
+                    rate-limit-value: 100
 
         handler-get-recipes:
             path: /api/v1/recipes
@@ -107,7 +107,7 @@ components_manager:
             middlewares:
                 pipeline-builder: custom-handler-pipeline-builder
                 rate-limit-decorator:
-                    rate-limit-value: 1
+                    rate-limit-value: 100
 
         handler-get-recipes-v2:
             path: /api/v2/recipes
@@ -158,6 +158,8 @@ components_manager:
             load-enabled: true
         rate-limit-decorator:
             load-enabled: true
+        recipe-producer-job:
+            load-enabled: true
 
         postgres-db-1:
             dbconnection: $pg-connection
@@ -168,6 +170,9 @@ components_manager:
         mongo-db:
             dbconnection: $pg-connection
             dbconnection#env: MONGO_DB_CONNECTION
+        mongo-write-db:
+            dbconnection: $mongo-write-connection
+            dbconnection#env: MONGO_WRITE_DB_CONNECTION
         redis-database:
             groups:
                 - config_name: ingredient
@@ -190,3 +195,16 @@ components_manager:
 
         custom-handler-pipeline-builder:
             load-enabled: true
+
+        recipe-rabbit:
+            min_pool_size: 1
+            max_pool_size: 2
+            max_in_flight_requests: 2
+            secdist_alias: recipe-rabbit
+            use_secure_connection: false
+
+        recipe-created-consumer:
+            load-enabled: true
+            rabbit_name: recipe-rabbit
+            queue: recipe.queue
+            prefetch_count: 2

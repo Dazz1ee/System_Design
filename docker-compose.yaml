@@ -34,10 +34,15 @@ services:
       AUTH_SERVICE_URL: "http://auth-service:8081"
       DB_CONNECTION: "postgresql://postgres:postgres@recipe-db:5432/recipe"
       MONGO_DB_CONNECTION: "mongodb://admin:password@recipe-mongo:27017/recipe-db?authSource=admin"
+      MONGO_WRITE_DB_CONNECTION: "mongodb://recipe-write-mongo:27017/recipe-db"
     depends_on:
       - auth-service
       - recipe-db
       - recipe-mongo
+      - recipe-write-mongo
+      - rabbit1
+      - rabbit2
+
     networks:
       - recipe-network
     healthcheck:
@@ -45,7 +50,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-
 
   auth-db:
     image: postgres:16
@@ -92,7 +96,20 @@ services:
       - mongo_config:/data/configdb
     networks:
       - recipe-network
-  
+
+  recipe-write-mongo:
+    image: mongo:8.0.20
+    container_name: recipe-write-mongo
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    restart: always
+    ports:
+      - "27019:27017"
+    volumes:
+      - write_mongo_data:/data/db
+      - write_mongo_config:/data/configdb
+    networks:
+      - recipe-network
+
   auth-mongo:
     image: mongo:8.0.20
     container_name: auth-mongo
@@ -189,6 +206,47 @@ services:
     networks:
       - recipe-network
 
+  rabbit1:
+    image: rabbitmq:3.13-management
+    container_name: rabbit1
+    hostname: rabbit1
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SUPER_SECRET_COOKIE"
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - recipe-network
+    volumes:
+      - rabbit1_data:/var/lib/rabbitmq
+
+  rabbit2:
+    image: rabbitmq:3.13-management
+    container_name: rabbit2
+    hostname: rabbit2
+    depends_on:
+      - rabbit1
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SUPER_SECRET_COOKIE"
+    ports:
+      - "5673:5672"
+      - "15673:15672"
+    volumes:
+      - rabbit2_data:/var/lib/rabbitmq
+    networks:
+      - recipe-network
+    command: >
+      bash -c "
+        rabbitmq-server &
+        sleep 10 &&
+        rabbitmqctl stop_app &&
+        rabbitmqctl join_cluster rabbit@rabbit1 &&
+        rabbitmqctl start_app &&
+        tail -f /dev/null
+      "
+
 volumes:
   grafana_data:
   auth_db_data:
@@ -197,6 +255,10 @@ volumes:
   mongo_config:
   auth_mongo_data:
   auth_mongo_config:
+  write_mongo_data:
+  write_mongo_config:
+  rabbit1_data:
+  rabbit2_data:
 
 networks:
   recipe-network:

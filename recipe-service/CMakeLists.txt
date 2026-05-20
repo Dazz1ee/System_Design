@@ -10,6 +10,7 @@ find_package(
     postgresql
     mongo
     redis
+    rabbitmq
     QUIET
 )
 if (NOT userver_FOUND)
@@ -64,7 +65,10 @@ add_library(
     src/service/cache/rate_limit_cache_service.cpp #
     src/rate-limit/rate_limit_decorator.cpp #
     src/rate-limit/rate_limit_middleware_factory.cpp
-    src/rate-limit/custom_pipeline.cpp #
+    src/rate-limit/custom_pipeline.cpp
+    src/service/events/recipe_producer_job.cpp
+    src/service/events/recipe_consumer.cpp
+    src/service/events/recipe_consumer.hpp #
 )
 target_link_libraries(
     ${PROJECT_NAME}_objs
@@ -72,6 +76,7 @@ target_link_libraries(
     userver::postgresql
     userver::mongo
     userver::redis
+    userver::rabbitmq
     jwt-cpp::jwt-cpp
 )
 

@@ -5,6 +5,7 @@
 #include "handler/get_ingredients/handler.hpp"
 
 namespace recipe {
+
 PostgresDbService::PostgresDbService(
     const userver::components::ComponentConfig& config,
     const userver::components::ComponentContext& context)
@@ -14,7 +15,8 @@ PostgresDbService::PostgresDbService(
               .GetCluster()) {}
 
 void CreateRecipeSteps(userver::storages::postgres::Transaction& transaction,
-                       const entity::Recipe& recipe, const std::int64_t& recipe_id) {
+                       const entity::Recipe& recipe,
+                       const std::int64_t& recipe_id) {
   const std::vector<std::string> steps = recipe.steps;
 
   std::vector<int64_t> recipe_ids;
@@ -126,15 +128,10 @@ std::vector<entity::Recipe> PostgresDbService::GetRecipes(
 
   std::vector<entity::Recipe> recipes;
   for (auto row : result) {
-    auto [id, title, desc, serv, cook, auth, created] = row.As<
-        int64_t,
-        std::string,
-        std::optional<std::string>,
-        std::optional<int>,
-        std::optional<int>,
-        int64_t,
-        std::chrono::system_clock::time_point
-    >();
+    auto [id, title, desc, serv, cook, auth, created] =
+        row.As<int64_t, std::string, std::optional<std::string>,
+               std::optional<int>, std::optional<int>, int64_t,
+               std::chrono::system_clock::time_point>();
 
     entity::Recipe r;
     r.id = id;
