@@ -149,7 +149,7 @@ schemas::CreateRecipeResponseV2DTO RecipeService::CreateRecipeV2(
     std::int64_t user_id) const {
   entity::MongoRecipe recipe = BuildMongoEntity(request, user_id);
   const entity::MongoRecipe& created_recipe =
-      mongo_db_service_.CreateRecipe(recipe);
+      mongo_db_service_.CreateRecipeV2(recipe);
   schemas::CreateRecipeResponseV2DTO response;
   response.id = created_recipe.id;
   response.createdAt =

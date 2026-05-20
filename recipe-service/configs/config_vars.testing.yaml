@@ -13,3 +13,5 @@ service-name: "recipe-service-local"
 
 # change to URI of your postgres database
 pg-connection: postgresql://testsuite@localhost:15433/recipe
+mongo-read-connection: mongodb://testsuite@localhost:15434/recipe
+mongo-write-connection: mongodb://testsuite@localhost:15435/recipe

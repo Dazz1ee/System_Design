@@ -18,13 +18,28 @@ class MongoDbService final : public userver::components::ComponentBase {
 
   entity::MongoRecipe CreateRecipe(const entity::MongoRecipe& recipe) const;
 
+  entity::MongoRecipe CreateRecipeV2(const entity::MongoRecipe& recipe) const;
+
+
   std::vector<entity::MongoRecipeIngredient> GetRecipeIngredients(
       const std::string& recipe_id) const;
+
 
   std::vector<entity::MongoRecipe> GetRecipes(std::string& last_id,
                                               int limit) const;
 
+  userver::storages::mongo::Cursor GetOutbox() const;
+
+  void SetOutboxSuccessStatus(const userver::formats::bson::Oid& oid) const;
+
  private:
+  std::vector<entity::MongoRecipe> GetRecipes(std::string& last_id,
+                                          int limit, const userver::storages::mongo::PoolPtr& mongo) const;
+
+  std::vector<entity::MongoRecipeIngredient> GetRecipeIngredients(
+    const std::string& recipe_id, const userver::storages::mongo::PoolPtr& mongo) const;
+
   const userver::storages::mongo::PoolPtr mongo_;
+  const userver::storages::mongo::PoolPtr mongo_write_;
 };
 }  // namespace recipe

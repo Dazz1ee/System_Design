@@ -42,5 +42,14 @@
         }
       ]
     }
+  },
+  "rabbitmq_settings": {
+    "recipe-rabbit": {
+      "hosts": ["rabbit1", "rabbit2"],
+      "port": 5672,
+      "login": "guest",
+      "password": "guest",
+      "vhost": "/"
+    }
   }
 }
